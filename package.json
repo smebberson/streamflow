@@ -7,6 +7,10 @@
     "htmlparser": "1.7.x",
     "underscore": "1.4.x"
   },
+  "devDependencies": {
+    "sinon": "1.6.x",
+    "mocha": "1.9.x"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/smebberson/streamflow.git"
