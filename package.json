@@ -5,7 +5,8 @@
   "main": "streamflow.js",
   "dependencies": {
     "htmlparser": "1.7.x",
-    "underscore": "1.4.x"
+    "underscore": "1.4.x",
+    "eventflow": "0.0.x"
   },
   "devDependencies": {
     "sinon": "1.6.x",

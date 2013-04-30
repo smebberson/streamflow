@@ -3,6 +3,7 @@
 // load node modules
 var util = require('util');
 var htmlparser = require('htmlparser');
+var events = require('events');
 
 (function () {
 
@@ -16,6 +17,9 @@ var htmlparser = require('htmlparser');
 		this._options = options || {};
 
 	}
+
+	// mixin the EventEmitter prototypes
+	Streamflow.prototype.__proto__ = events.EventEmitter.prototype;
 
 	// public property
 	Streamflow.prototype.parse = function Streamflow$parse (html) {
