@@ -12,8 +12,11 @@ var events = require('events');
 	// Class
 	function Streamflow (options) {
 
-		var self = this;
+		// class variables
+		this._dom = {};
+		this._previousTag = {};
 
+		// define arguments
 		this._options = options || {};
 
 	}
@@ -24,22 +27,58 @@ var events = require('events');
 	// public property
 	Streamflow.prototype.parse = function Streamflow$parse (html) {
 
-		var _dom = {};
+		// set local variables 
+		var _this = this;
 
+		// parse the HTML document
 		new htmlparser.Parser(
 
 			new htmlparser.DefaultHandler(
 				function (err, dom) {
-					_dom = dom;
+					_this._dom = dom;
 				},
 				{verbose: true, ignoreWhitespace: true}
 			)
 
 		).parseComplete(html);
 
-		return _dom;
+		// walk the tree
+		this.walk();
+
+		// return the tree
+		return this._dom;
 
 	};
+
+	Streamflow.prototype.walk = function (dom) {
+
+		// local variables
+		var i;
+		var tag;
+		var nextTag;
+
+		// the argument is optional, grab the dom from the class if not passed in
+		dom = dom || this._dom;
+
+		// walk the dom tree
+		for (i = 0; i < dom.length; i++) {
+
+			// current tag
+			tag = dom[i];
+			nextTag = dom[i+1] || {};
+
+			// fire a generic node event
+			this.emit('node', this._previousTag, tag, nextTag);
+
+			// update the previousTag
+			this._previousTag = tag;
+
+			// does the tag have children, recursively walk
+			if (tag.children) this.walk(tag.children);
+
+		}
+
+	}
 
 	// make the Streamflow class available
 	exports.Streamflow = Streamflow;
