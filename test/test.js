@@ -31,12 +31,14 @@ describe("streamflow", function() {
 		sf.parse('<html><head></head><body class="what"></body></html>').should.be.an.instanceOf(Object);
 	});
 
-	it("should fire a node event", function () {
+	it("should fire a node event for each node when walking the tree", function () {
 
 		var spy = sinon.spy();
 		sf.on('node', spy);
 
-		spy.called.should.equal.true;
+		sf.parse('<html><head></head><body class="what"></body></html>').should.be.an.instanceOf(Object);
+
+		spy.called.should.be.true;
 
 	});
 
