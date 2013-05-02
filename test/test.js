@@ -42,4 +42,16 @@ describe("streamflow", function() {
 
 	});
 
+	it("should not fire an event for those nodes children that shouldn't be walked (via string)", function () {
+
+		var spy = sinon.spy();
+		sf.on('node', spy);
+
+		sf.addIgnoreNestedWithin('h3');
+		sf.parse('<html><head></head><body class="what"><h1>Test body</h1><p>This is a paragraph.</p><h3><em>heading three title</em></h3></body></html>');
+
+		spy.callCount.should.equal(8);
+
+	});
+
 });

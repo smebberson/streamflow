@@ -4,6 +4,7 @@
 var util = require('util');
 var htmlparser = require('htmlparser');
 var events = require('events');
+var _ = require("underscore");
 
 (function () {
 
@@ -15,6 +16,7 @@ var events = require('events');
 		// class variables
 		this._dom = {};
 		this._previousTag = {};
+		this._ignoreNestedWithin = [];
 
 		// define arguments
 		this._options = options || {};
@@ -24,7 +26,16 @@ var events = require('events');
 	// mixin the EventEmitter prototypes
 	Streamflow.prototype.__proto__ = events.EventEmitter.prototype;
 
-	// public property
+	// public method
+	Streamflow.prototype.addIgnoreNestedWithin = function Streamflow$addIgnoreNested (tag) {
+
+		if (!_.contains(this._ignoreNestedWithin, tag)) {
+			this._ignoreNestedWithin.push(tag);
+		}
+
+	};
+
+	// public method
 	Streamflow.prototype.parse = function Streamflow$parse (html) {
 
 		// set local variables 
@@ -50,6 +61,7 @@ var events = require('events');
 
 	};
 
+	// private method
 	Streamflow.prototype.walk = function (dom) {
 
 		// local variables
@@ -74,7 +86,7 @@ var events = require('events');
 			this._previousTag = tag;
 
 			// does the tag have children, recursively walk
-			if (tag.children) this.walk(tag.children);
+			if (tag.children && !_.contains(this._ignoreNestedWithin, tag.name)) this.walk(tag.children);
 
 		}
 
