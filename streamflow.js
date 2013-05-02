@@ -27,10 +27,16 @@ var _ = require("underscore");
 	Streamflow.prototype.__proto__ = events.EventEmitter.prototype;
 
 	// public method
-	Streamflow.prototype.addIgnoreNestedWithin = function Streamflow$addIgnoreNested (tag) {
+	Streamflow.prototype.addIgnoreNestedWithin = function (tag) {
 
-		if (!_.contains(this._ignoreNestedWithin, tag)) {
-			this._ignoreNestedWithin.push(tag);
+		var tags = (tag instanceof Array) ? tag : new Array(tag);
+
+		for (var index in tags) {
+
+			if (!_.contains(this._ignoreNestedWithin, tags[index])) {
+				this._ignoreNestedWithin.push(tags[index]);
+			}
+
 		}
 
 	};
